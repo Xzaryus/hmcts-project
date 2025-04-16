@@ -1,105 +1,124 @@
+require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
+const mysql = require('mysql2/promise');
 const app = express();
-const port = 5000;
+const port = process.env.PORT || 5000;
 
 const cors = require('cors');
 app.use(cors({
-    origin: 'http://localhost:5173',
-
+    origin: ['http://localhost:5173', 'https://hmcts-project.vercel.app'], //vercel frontend],
     credentials: true
 }));
 
-app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
+// MySQL connection pool
+const pool = mysql.createPool({
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
+    waitForConnections: true,
+    connectionLimit: 10,
+    queueLimit: 0
 });
 
-const sqlite3 = require('sqlite3').verbose();
+app.use(bodyParser.json());
 
-const db = new sqlite3.Database('./tasks.db', sqlite3.OPEN_READWRITE, (err) => {
-    if (err) return console.error(err.message);
-    console.log('Connected to the tasks database.');
-})
+// Test DB connection
+pool.getConnection()
+    .then(conn => {
+        console.log('Connected to MySQL database');
+        conn.release();
+    })
+    .catch(err => {
+        console.error('Database connection failed:', err);
+    });
 
-app.use(bodyParser.json()); // support json encoded bodies
-
-
-// POST request
-app.post('/tasks', (req, res) => {
+// POST /tasks
+app.post('/tasks', async (req, res) => {
     const { task, description = null, due_date } = req.body;
-    const completed = false;
-
+    
     if (!task || !due_date) {
-        return res.status(400).json({ error: "Both 'task' and 'due_date' are required"}); // Bad Request
+        return res.status(400).json({ error: "Both 'task' and 'due_date' are required" });
     }
 
-    const sql = `INSERT INTO tasks (task,description, completed, due_date) 
-    VALUES (?, ?, ?, ?)`;
-
-    db.run(sql, [task, description, completed, due_date], function (err) {
-        if (err) return res.json({ error: err.message }); // Internal Server Error
-
-        res.status(201).json({ id: this.lastID }); // Return ID of inserted task
-    });
-});
-
-// GET request
-app.get('/tasks', (req, res) => {
-    let sql = `SELECT * FROM tasks`;
-    let params = [];
-
-    const showCompleted = req.query.showCompleted;
-    if (showCompleted === 'true') {
-        sql += ' WHERE completed = 1';
-    } else if (showCompleted === 'false') {
-        sql += ' WHERE completed = 0';
+    try {
+        const [result] = await pool.query(
+            'INSERT INTO tasks (task, description, completed, due_date) VALUES (?, ?, FALSE, ?)',
+            [task, description, due_date]
+        );
+        res.status(201).json({ id: result.insertId });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
     }
-
-    sql += ' ORDER BY due_date ASC';
-
-    db.all(sql, params, (err, rows) => {
-        if (err) return res.json({ error: err.message }); // Internal Server Error
-        if (rows.length === 0) return res.json({ error: "No tasks found" });
-        res.json({status: 200, tasks: rows, success: true});
-    });
 });
 
-// PUT request
-app.put('/tasks/:id', (req, res) => {
+// GET /tasks
+app.get('/tasks', async (req, res) => {
+    try {
+        let query = 'SELECT * FROM tasks';
+        const params = [];
+        
+        if (req.query.showCompleted === 'true') {
+            query += ' WHERE completed = TRUE';
+        } else if (req.query.showCompleted === 'false') {
+            query += ' WHERE completed = FALSE';
+        }
+        
+        query += ' ORDER BY due_date ASC';
+        
+        const [rows] = await pool.query(query, params);
+        res.json({ status: 200, tasks: rows, success: true });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// PUT /tasks/:id
+app.put('/tasks/:id', async (req, res) => {
     const { id } = req.params;
     const { completed } = req.body;
 
     if (typeof completed !== 'boolean') {
         return res.status(400).json({ error: "'completed' must be a boolean" });
-    } 
-// Convert completed value to 0 or 1 as SQLite doesn't support boolean
-    const completedValue = completed ? 1 : 0;
+    }
 
-    const sql = `UPDATE tasks SET completed = ? WHERE id = ?`;
-    db.run(sql, [completedValue, id],
-        function (err) {
-            if (err) return res.status(500).json({ 'Database error': err.message }); // Internal Server Error
-
-            if (this.changes === 0) {
-                return res.status(404).json({ error: "Task not found" }); // Not Found
-            }
-
-            res.json({ status: 200, message: "Task updated successfully", success: true });
-        });
+    try {
+        const [result] = await pool.query(
+            'UPDATE tasks SET completed = ? WHERE id = ?',
+            [completed, id]
+        );
+        
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ error: "Task not found" });
+        }
+        
+        res.json({ status: 200, message: "Task updated successfully", success: true });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 });
 
-
-// DELETE request
-app.delete('/tasks/:id', (req, res) => {
+// DELETE /tasks/:id
+app.delete('/tasks/:id', async (req, res) => {
     const { id } = req.params;
-    const sql = `DELETE FROM tasks WHERE id = ?`;
-    db.run(sql, [id], function (err) {
-        if (err) return res.status(500).json({ error: err.message }); // Internal Server Error
-
-        if (this.changes === 0) {
-            return res.status(404).json({ error: "Task not found" }); // Not Found
+    
+    try {
+        const [result] = await pool.query(
+            'DELETE FROM tasks WHERE id = ?',
+            [id]
+        );
+        
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ error: "Task not found" });
         }
-
+        
         res.json({ status: 200, message: "Task deleted successfully", success: true });
-    });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+app.listen(port, () => {
+    console.log(`Server is running on port ${port}`);
 });

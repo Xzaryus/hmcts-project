@@ -1,19 +1,29 @@
-const sqlite3 = require('sqlite3').verbose();
+require('dotenv').config();
+const mysql = require('mysql2/promise');
 
-const db = new sqlite3.Database('./tasks.db', sqlite3.OPEN_READWRITE, (err) => {
-    if (err) return console.error(err.message);
-    console.log('Connected to the tasks database.');
-})
+async function createTable() {
+    const connection = await mysql.createConnection({
+        host: process.env.DB_HOST,
+        user: process.env.DB_USER,
+        password: process.env.DB_PASSWORD
+    });
 
-const sql = `CREATE TABLE tasks (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    task TEXT NOT NULL,
-    description TEXT,
-    completed BOOLEAN DEFAULT FALSE NOT NULL,
-    due_date DATETIME
-)`;
+    await connection.query(`CREATE DATABASE IF NOT EXISTS ${process.env.DB_NAME}`);
+    await connection.query(`USE ${process.env.DB_NAME}`);
+    
+    const sql = `CREATE TABLE IF NOT EXISTS tasks (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        task VARCHAR(255) NOT NULL,
+        description TEXT,
+        completed BOOLEAN DEFAULT FALSE,
+        due_date DATETIME NOT NULL
+    )`;
+    
+    await connection.query(sql);
+    console.log('Table created successfully');
+    await connection.end();
+}
 
-db.run(sql, (err) => {
-    if (err) return console.error(err.message);
-    console.log('Table created.');
-})
+createTable().catch(err => {
+    console.error('Error:', err);
+});
