@@ -1,0 +1,147 @@
+:root {
+  --primary-color: #161925;
+  --secondary-color: #23395B;
+  --tertiary-color: #93A3B1;
+}
+
+*{
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  color: white;
+}
+
+body{
+  background-color: var(--primary-color);
+  font-family: Arial, Helvetica, sans-serif;
+}
+/* add a media query for smaller screens so #menu doesn't get squashed */
+header{
+  width: 100%;
+  background-color: var(--secondary-color);
+  padding: 1rem;
+
+}
+
+.top{
+  display: flex;
+  justify-content: space-around;
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  align-items: center;
+  justify-items: center;
+}
+
+
+.top li{
+  background-color: var(--primary-color);
+  margin: 0.25rem;
+  border-radius: 1rem;
+  padding: 0.25rem 1rem;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+
+.top li:hover{
+  background-color: var(--tertiary-color);
+}
+
+
+.top li.active{
+  background-color: var(--tertiary-color);
+  font-weight: bold;
+}
+
+.error-message {
+  color: #d32f2f;
+  background-color: #ffebee;
+  padding: 10px;
+  border-radius: 4px;
+  margin: 10px 0;
+  text-align: center;
+}
+
+#task-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  padding: 1rem;
+  background-color: var(--primary-color);
+  border-radius: 1rem;
+}
+
+#task-form form{
+  width: 40%;
+  background-color: var(--secondary-color);
+  padding: 1rem;
+  border-radius: 1rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+#task-form h2{
+  margin-bottom: 1rem;
+}
+
+#task-form input{
+  margin-bottom: 1rem;
+  background-color: var(--tertiary-color);
+}
+
+#task-form button{
+  padding: 0.5rem;
+  border-radius: 1rem;
+  margin-top: 0.5rem;
+  cursor: pointer;
+  background-color: var(--tertiary-color);
+}
+
+#task-space{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: stretch;
+  justify-content: center;
+  gap: 1.5rem;
+  padding: 1rem;
+}
+.task {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1rem;
+  background-color: var(--secondary-color);
+  padding: 0.5rem;
+  margin: 0.25%;
+  border-radius: 1rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  width: 100%;
+  min-width: 20vh;
+  max-width: 30vh;
+  aspect-ratio: 1/1;
+}
+
+.task button {
+  padding: 0.5rem;
+  border-radius: 1rem;
+  cursor: pointer;
+  background-color: var(--tertiary-color);
+}
+
+#delete-task{
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+#delete-task:hover{
+  background-color: red;
+}
+
+button:hover{
+  transform: scale(1.05);
+}
