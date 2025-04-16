@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { refreshTasks } from './api/taskActions'
 import TaskForm from './components/TaskForm'
 import Menu from "./components/Menu"
-import TaskSpace from './components/taskSpace'
+import TaskSpace from './components/TaskSpace'
 
 function App() {
 
