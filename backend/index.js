@@ -7,7 +7,7 @@ const port = process.env.PORT || 5000;
 
 const cors = require('cors');
 app.use(cors({
-    origin: ['http://localhost:5173', 'https://hmcts-project.vercel.app/'], //vercel frontend],
+    origin: ['http://localhost:5173', 'https://hmcts-project.vercel.app'], //vercel frontend],
     credentials: true
 }));
 
