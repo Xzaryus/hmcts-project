@@ -3,7 +3,11 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mysql = require('mysql2/promise');
 const app = express();
-const port = process.env.PORT || 5000;
+const port = process.env.PORT;
+if (!port) {
+    console.error('PORT environment variable is not set');
+    process.exit(1);
+}
 
 const cors = require('cors');
 app.use(cors({
