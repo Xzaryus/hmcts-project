@@ -3,7 +3,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mysql = require('mysql2/promise');
 const app = express();
-const port = process.env.PORT || 5000;
+const port = process.env.MYSQLPORT || 5000;
 
 const cors = require('cors');
 app.use(cors({
@@ -13,10 +13,10 @@ app.use(cors({
 
 // MySQL connection pool
 const pool = mysql.createPool({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
+    host: process.env.MYSQLHOST,
+    user: process.env.MYSQLUSER,
+    password: process.env.MYSQLPASSWORD,
+    database: process.env.MYSQLDATABASE,
     waitForConnections: true,
     connectionLimit: 10,
     queueLimit: 0
