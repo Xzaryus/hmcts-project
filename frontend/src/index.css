@@ -51,6 +51,8 @@ body{
   max-width: 100%;
   aspect-ratio: auto;
   box-sizing: border-box;
+  padding: 0.5rem;
+  min-height: 300px;
   }
 
   .task button{
