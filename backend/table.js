@@ -3,13 +3,20 @@ const mysql = require('mysql2/promise');
 
 async function createTable() {
     const connection = await mysql.createConnection({
-        host: process.env.DB_HOST,
-        user: process.env.DB_USER,
-        password: process.env.DB_PASSWORD
+        host: process.env.MYSQLHOST,
+        user: process.env.MYSQLUSER,
+        password: process.env.MYSQLPASSWORD,
+        database: process.env.MYSQLDATABASE,
+        port: process.env.MYSQLPORT
     });
 
-    await connection.query(`CREATE DATABASE IF NOT EXISTS ${process.env.DB_NAME}`);
-    await connection.query(`USE ${process.env.DB_NAME}`);
+    console.log('Connected to MySQL database');
+
+    await connection.query(`CREATE DATABASE IF NOT EXISTS ${process.env.MYSQLDATABASE}`);
+    console.log('Database created successfully or already exists');
+    
+    await connection.query(`USE ${process.env.MYSQLDATABASE}`);
+    console.log('Using the correct database');
     
     const sql = `CREATE TABLE IF NOT EXISTS tasks (
         id INT AUTO_INCREMENT PRIMARY KEY,
