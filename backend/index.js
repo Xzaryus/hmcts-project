@@ -13,7 +13,7 @@ app.use(cors({
 
 // MySQL connection pool
 const pool = mysql.createPool({
-    host: process.env.MYSQLHOST,
+    host: process.env.MYSQLHOST || 'localhost',
     user: process.env.MYSQLUSER,
     password: process.env.MYSQLPASSWORD,
     database: process.env.MYSQLDATABASE,
