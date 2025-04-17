@@ -16,6 +16,44 @@ body{
   font-family: Arial, Helvetica, sans-serif;
 }
 /* add a media query for smaller screens so #menu doesn't get squashed */
+
+@media only screen and (max-width: 600px) {
+  body{
+    max-width: 100%;
+  }
+  .top{
+    flex-wrap: wrap;
+  }
+  #task-form form{
+    min-width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  #task-form form input{
+    margin: 0;
+  }
+
+  #task-form form button{
+    margin:0.5rem;
+  }
+
+  #task-space{
+    display: grid !important;
+    grid-template-columns: repeat(2,minmax(0, 1fr));
+    gap: 1rem;
+    justify-items: center;
+  }
+
+  .task{
+  width: 100%;
+  max-width: 100%;
+  aspect-ratio: auto;
+  }
+
+}
+
 header{
   width: 100%;
   background-color: var(--secondary-color);
@@ -90,6 +128,8 @@ header{
 #task-form input{
   margin-bottom: 1rem;
   background-color: var(--tertiary-color);
+  border-radius: 1rem;
+  padding: 0.5rem;
 }
 
 #task-form button{
