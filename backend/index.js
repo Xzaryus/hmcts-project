@@ -17,7 +17,9 @@ app.listen(port, () => {
 
 const cors = require('cors');
 app.use(cors({
-    origin: ['http://localhost:5173', 'https://hmcts-project.vercel.app'], //vercel frontend],
+    origin: ['http://localhost:5173',
+        'https://hmcts-project.vercel.app',
+        'https://hmcts-project-djnn9wysd-xzaryus-projects.vercel.app'], //vercel frontend],
     credentials: true
 }));
 
@@ -133,6 +135,3 @@ app.delete('/tasks/:id', async (req, res) => {
     }
 });
 
-app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
-});
