@@ -11,6 +11,8 @@ app.use(cors({
     credentials: true
 }));
 
+app.options('*', cors());
+
 console.log('Connecting to MySQL database at:', process.env.MYSQLHOST);
 
 // MySQL connection pool
