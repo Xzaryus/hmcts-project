@@ -9,6 +9,12 @@ if (!port) {
     process.exit(1);
 }
 
+console.log('PORT:', port);
+
+app.listen(port, () => {
+    console.log(`Server running on port ${port}`);
+});
+
 const cors = require('cors');
 app.use(cors({
     origin: ['http://localhost:5173', 'https://hmcts-project.vercel.app'], //vercel frontend],
