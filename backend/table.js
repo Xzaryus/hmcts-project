@@ -36,19 +36,24 @@ async function createTable() {
     await connection.query(sql);
     console.log('Table created successfully');
 
+    await connection.query(`ALTER TABLE users ADD COLUMN password VARCHAR(255) NOT NULL`);
+
+
     //Update Tasks
 
-    const taskUpdate = `ALTER TABLE tasks
-ADD COLUMN user_id INT,
-ADD CONSTRAINT fk_user_task FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE;
-`;
+//     const taskUpdate = `ALTER TABLE tasks
+// ADD COLUMN user_id INT,
+// ADD CONSTRAINT fk_user_task FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE;
+// `;
 
-    await connection.query(taskUpdate);
-    console.log('Table updated successfully');
+//     await connection.query(taskUpdate);
+//     console.log('Table updated successfully');
 
     // clear tasks
-    const clearTasks = `TRUNCATE TABLE tasks`;
-    await connection.query(clearTasks);
+//     const clearTasks = `TRUNCATE TABLE tasks`;
+//     await connection.query(clearTasks);
+
+
     await connection.end();
 }
 
