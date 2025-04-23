@@ -17,6 +17,13 @@ async function createTable() {
     
     await connection.query(`USE ${process.env.MYSQLDATABASE}`);
     console.log('Using the correct database');
+
+    const sqlUsers = `CREATE TABLE IF NOT EXISTS users (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        username VARCHAR(255) NOT NULL
+    )`;
+
+    await connection.query(sqlUsers);
     
     const sql = `CREATE TABLE IF NOT EXISTS tasks (
         id INT AUTO_INCREMENT PRIMARY KEY,
@@ -28,6 +35,20 @@ async function createTable() {
     
     await connection.query(sql);
     console.log('Table created successfully');
+
+    //Update Tasks
+
+    const taskUpdate = `ALTER TABLE tasks
+ADD COLUMN user_id INT,
+ADD CONSTRAINT fk_user_task FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE;
+`;
+
+    await connection.query(taskUpdate);
+    console.log('Table updated successfully');
+
+    // clear tasks
+    const clearTasks = `TRUNCATE TABLE tasks`;
+    await connection.query(clearTasks);
     await connection.end();
 }
 
