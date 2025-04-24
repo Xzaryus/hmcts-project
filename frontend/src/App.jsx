@@ -16,21 +16,29 @@ function App() {
   const [signup, setSignup] = useState(false);
 
   useEffect(() => {
-    const token = getToken();
-    if (token) {
-      setLoggedIn(true);
-      refreshUI().catch((err) => {
-        console.error('Error refreshing tasks:', err);
+    const validateSession = async () => {
+      const token = getToken();
 
-        if (err.message.includes('No valid token') || (err.response?.status === 403)) {
-          alert('Session expired. Please log in again.');
-          handleLogout();
-          setLoggedIn(false);
+      if (!token) {
+        setLoggedIn(false);
+        return;
+      }
+
+      try {
+        const freshTasks = await refreshTasks();
+        setTasks(freshTasks);
+        setLoggedIn(true);
+      } catch (err) {
+        console.error('Session token validation failed:', err);
+
+        if (err.response?.status === 403) {
+          alert(err.response?.data?.error || 'Session expired');
         }
-      });
-    } else {
-      setLoggedIn(false);
-    }
+        handleLogout();
+      }
+    };
+
+    validateSession();
   }, []);
 
   const refreshUI = async () => {
