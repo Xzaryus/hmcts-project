@@ -19,7 +19,17 @@ function App() {
     const token = getToken();
     if (token) {
       setLoggedIn(true);
-      refreshUI();
+      refreshUI().catch((err) => {
+        console.error('Error refreshing tasks:', err);
+
+        if (err.message.includes('No valid token') || (err.response?.status === 403)) {
+          alert('Session expired. Please log in again.');
+          handleLogout();
+          setLoggedIn(false);
+        }
+      });
+    } else {
+      setLoggedIn(false);
     }
   }, []);
 

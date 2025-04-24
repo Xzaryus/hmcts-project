@@ -24,8 +24,9 @@ const SignUpForm = ({ switchToLogin, onSignupSuccess }) => {
     };
 
     return (
-        <div>
+        <div className="login-form">
             <h2>Sign Up</h2>
+            <br />
             <form onSubmit={handleSubmit}>
                 <input
                     type="text"
@@ -34,6 +35,7 @@ const SignUpForm = ({ switchToLogin, onSignupSuccess }) => {
                     onChange={(e) => setUsername(e.target.value)}
                     required
                 />
+                <br />
                 <input
                     type="password"
                     placeholder="Password"
@@ -41,10 +43,11 @@ const SignUpForm = ({ switchToLogin, onSignupSuccess }) => {
                     onChange={(e) => setPassword(e.target.value)}
                     required
                 />
+                <br />
                 <button type="submit">Sign Up</button>
             </form>
             {error && <p>{error}</p>}
-            <p>Already have an account? <button onClick={switchToLogin}>Login</button></p>
+            <p>Already have an account? </p> <button onClick={switchToLogin}>Login</button>
         </div>
     );
 };

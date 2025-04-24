@@ -14,6 +14,7 @@ const LoginForm = ({ switchToSignup, onLoginSuccess }) => {
         try {
             const data = await loginUser(loginData); // Call the loginUser function
             console.log('Login successful:', data);
+            sessionStorage.setItem('jwt_token', data.token);
             onLoginSuccess();
         // eslint-disable-next-line no-unused-vars
         } catch (err) {
@@ -22,8 +23,9 @@ const LoginForm = ({ switchToSignup, onLoginSuccess }) => {
     };
 
     return (
-        <div>
+        <div className="login-form">
             <h2>Login</h2>
+            <br />
             <form onSubmit={handleSubmit}>
                 <input
                     type="text"
@@ -32,6 +34,7 @@ const LoginForm = ({ switchToSignup, onLoginSuccess }) => {
                     onChange={(e) => setUsername(e.target.value)}
                     required
                 />
+                <br />
                 <input
                     type="password"
                     placeholder="Password"
@@ -39,10 +42,11 @@ const LoginForm = ({ switchToSignup, onLoginSuccess }) => {
                     onChange={(e) => setPassword(e.target.value)}
                     required
                 />
+                <br />
                 <button type="submit">Login</button>
             </form>
             {error && <p>{error}</p>}
-            <p>Dont't have an account? <button onClick={switchToSignup}>Sign Up</button></p>
+            <p>Don't have an account? </p> <button onClick={switchToSignup}>Sign Up</button>
         </div>
     );
 };
