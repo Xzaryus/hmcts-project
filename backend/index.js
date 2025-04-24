@@ -74,8 +74,8 @@ pool.getConnection()
         });
     };
 
-// User registration
-app.post('/register', async (req, res) => {
+// User signup
+app.post('/signup', async (req, res) => {
     const { username, password } = req.body;
     
     if (!username || !password) {

@@ -17,6 +17,7 @@ const SignUpForm = ({ switchToLogin, onSignupSuccess }) => {
             console.log('Signup successful:', data);
             sessionStorage.setItem('jwt_token', data.token);
             onSignupSuccess();
+        // eslint-disable-next-line no-unused-vars
         } catch (err) {
             setError('Signup failed');
         }

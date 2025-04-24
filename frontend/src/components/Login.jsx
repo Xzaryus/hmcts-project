@@ -15,6 +15,7 @@ const LoginForm = ({ switchToSignup, onLoginSuccess }) => {
             const data = await loginUser(loginData); // Call the loginUser function
             console.log('Login successful:', data);
             onLoginSuccess();
+        // eslint-disable-next-line no-unused-vars
         } catch (err) {
             setError('Invalid Username or Password');
         }
