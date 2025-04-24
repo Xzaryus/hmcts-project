@@ -133,7 +133,7 @@ app.post('/login', async (req, res) => {
             return res.status(400).json({ error: "Invalid password" });
         }
         
-        const token = jwt.sign({ user_id: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        const token = jwt.sign({ user_id: user.id }, process.env.JWT_SECRET, { expiresIn: '1d' });
 
         res.json({ token });
     } catch (err) {
@@ -152,7 +152,7 @@ app.post('/tasks',authenticateJWT, async (req, res) => {
 
     try {
         const [result] = await pool.query(
-            'INSERT INTO tasks (task, description, completed, due_date, user_id) VALUES (?, ?, FALSE, ?)',
+            'INSERT INTO tasks (task, description, completed, due_date, user_id) VALUES (?, ?, FALSE, ?, ?)',
             [task, description, due_date, user_id]
         );
         res.status(201).json({ id: result.insertId });

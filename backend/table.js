@@ -36,8 +36,6 @@ async function createTable() {
     await connection.query(sql);
     console.log('Table created successfully');
 
-    await connection.query(`ALTER TABLE users ADD COLUMN password VARCHAR(255) NOT NULL`);
-
 
     //Update Tasks
 

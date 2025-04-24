@@ -1,5 +1,5 @@
 
-function Menu ({openForm, setFilter, filter}) {
+function Menu ({openForm, setFilter, filter, handleLogout}) {
 
     return (
         <header>
@@ -19,7 +19,12 @@ function Menu ({openForm, setFilter, filter}) {
                 >
                     Completed tasks
                 </li>
-                <li onClick={openForm}>Add task</li>
+                <li onClick={openForm}>
+                    Add task
+                </li>
+                <li onClick={handleLogout}>
+                    Logout
+                </li>
             </ul>
         </header>
     )
