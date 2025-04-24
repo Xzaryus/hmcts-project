@@ -7,8 +7,18 @@ const SignUpForm = ({ switchToLogin, onSignupSuccess }) => {
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
 
+    const validatePassword = (pw) => {
+        const nonLetters = (pw.match(/[^a-zA-Z]/g) || []).length;
+        return nonLetters >= 3;
+    }
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setError('');
+
+        if (!validatePassword(password)) {
+            setError('Password must contain at least 3 non-alphabetic characters');
+            return;
+        }
 
         const signupData = { username, password };
 
@@ -43,6 +53,8 @@ const SignUpForm = ({ switchToLogin, onSignupSuccess }) => {
                     onChange={(e) => setPassword(e.target.value)}
                     required
                 />
+                <br />
+                <h6>Password must contain at least 3 non-alphabetic characters</h6>
                 <br />
                 <button type="submit">Sign Up</button>
             </form>
