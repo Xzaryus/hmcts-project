@@ -1,55 +1,18 @@
-## API Documentation
+HMCTS Task Manager
 
-### POST /tasks
-- **Description**: Create a new task.
-- **Request Body**:
-  ```json
-  {
-    "task": "Task Name",
-    "description": "Task description",
-    "due_date": "2025-05-01T12:00:00Z"
-  }
-  ```
-- **Response**:
-  ```json
-  {
-    "id": 1
-  }
-  ```
+A task management system that helps caseworkers track their tasks efficiently. This project includes both a backend API (built with Express.js) and a frontend application (built with React).
 
-### GET /tasks
-- **Description**: Get all tasks, optionally filtered by completion status.
-- **Query Parameters**: `showCompleted=true|false`
-- **Response**:
-  ```json
-  [
-    {
-      "id": 1,
-      "task": "Task 1",
-      "description": "Description 1",
-      "completed": false,
-      "due_date": "2025-05-01T12:00:00Z"
-    }
-  ]
-  ```
+Features
+Task Management: Create, view, update, and delete tasks.
 
-### PUT /tasks/:id
-- **Description**: Update an existing task.
-- **Request Body**:
-  ```json
-  {
-    "task": "Updated Task Name",
-    "description": "Updated Description",
-    "completed": true,
-    "due_date": "2025-06-01T12:00:00Z"
-  }
-  ```
+Authentication: JWT-based authentication for secure login and task access.
 
-### DELETE /tasks/:id
-- **Description**: Delete a task by ID.
-- **Response**:
-  ```json
-  {
-    "message": "Task deleted successfully"
-  }
-  ```
+Error Handling: Detailed error responses for better debugging.
+
+Tech Stack
+Frontend: React, Vite
+Backend: Express.js, MySQL
+Authentication: JSON Web Tokens (JWT)
+Database: MySQL
+
+Deployment: Railway (backend), Vercel (frontend)
