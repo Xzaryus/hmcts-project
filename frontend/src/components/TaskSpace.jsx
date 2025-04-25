@@ -20,6 +20,9 @@ function TaskSpace({tasks, refreshUI, filter}) {
         }
     }
     const handleDelete = async (taskId) => {
+        if (!window.confirm('Are you sure you want to delete this task?')) {
+            return;
+        }
         try {
             await deleteTask(taskId);
         } catch (err) {
