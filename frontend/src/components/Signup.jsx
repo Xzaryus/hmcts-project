@@ -54,7 +54,7 @@ const SignUpForm = ({ switchToLogin, onSignupSuccess }) => {
                     required
                 />
                 <br />
-                <h6>Password must contain at least 3 non-alphabetic characters</h6>
+                <h6>Password must be at least 8 characters long and contain at least 3 non-alphabetic characters</h6>
                 <br />
                 <button type="submit">Sign Up</button>
             </form>
